@@ -64,6 +64,7 @@ export const useUpdateBanner = () => {
     data: Partial<FormData>;
     id: string;
   }) => {
+    toast.loading("wait", { id: "add-banner" });
     const res = await axios.put(`/api/v1/banner/${id}`, data);
     console.log(res);
     if (res.statusText === "OK") {
