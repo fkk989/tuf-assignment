@@ -1,0 +1,19 @@
+
+
+@keyframes width-0 {
+  from{
+   transform: scaleX(0)
+  }
+}
+
+
+
+.from-width-0{
+  animation: width-0 300ms ease-out ;
+  transform-origin: left;
+}
+.custom-shadow{
+  -webkit-box-shadow: 0px 1px 30px -3px rgba(0,0,0,0.24);
+  -moz-box-shadow: 0px 1px 30px -3px rgba(0,0,0,0.24);
+  box-shadow: 0px 1px 30px -3px rgba(0,0,0,0.24);
+}
