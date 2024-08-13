@@ -15,7 +15,6 @@ const types_1 = require("@/lib/types");
 const bannerPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const reqBody = req.body;
-        console.log(reqBody);
         //
         const parsedInput = yield types_1.bannerSchema.safeParse(reqBody);
         if (!parsedInput.success) {
@@ -37,15 +36,16 @@ const bannerPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 message: "end Data should be after than start date",
             });
         }
+        // banner present in the same date range
         const banner_present_with_overlap = yield db_1.prisma.banner.findFirst({
             where: {
-                OR: [
+                AND: [
                     {
                         start_time: {
-                            lte: end_time,
+                            lte: start_time,
                         },
                         end_time: {
-                            gte: start_time,
+                            gte: end_time,
                         },
                     },
                 ],
@@ -55,7 +55,7 @@ const bannerPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if (banner_present_with_overlap) {
             return res.status(409).json({
                 success: false,
-                message: `please edit or delete banner scheduled on the same date`,
+                message: `please edit or delete banner overlaping the same dates`,
             });
         }
         yield db_1.prisma.banner.create({

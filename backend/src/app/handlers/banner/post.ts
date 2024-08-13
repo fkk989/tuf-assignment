@@ -5,7 +5,6 @@ import { bannerSchema } from "@/lib/types";
 export const bannerPost = async (req: Request, res: Response) => {
   try {
     const reqBody = req.body;
-    console.log(reqBody);
     //
     const parsedInput = await bannerSchema.safeParse(reqBody);
     if (!parsedInput.success) {
@@ -29,15 +28,16 @@ export const bannerPost = async (req: Request, res: Response) => {
         message: "end Data should be after than start date",
       });
     }
+    // banner present in the same date range
     const banner_present_with_overlap = await prisma.banner.findFirst({
       where: {
-        OR: [
+        AND: [
           {
             start_time: {
-              lte: end_time,
+              lte: start_time,
             },
             end_time: {
-              gte: start_time,
+              gte: end_time,
             },
           },
         ],
@@ -48,7 +48,7 @@ export const bannerPost = async (req: Request, res: Response) => {
     if (banner_present_with_overlap) {
       return res.status(409).json({
         success: false,
-        message: `please edit or delete banner scheduled on the same date`,
+        message: `please edit or delete banner overlaping the same dates`,
       });
     }
 

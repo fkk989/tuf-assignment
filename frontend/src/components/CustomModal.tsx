@@ -19,7 +19,6 @@ const Root: React.FC<{
   const toggle = () => setIsOpen((crnt) => !crnt);
   const close = () => {
     setIsOpen(false);
-    console.log("function ran");
   };
   //
 
@@ -56,7 +55,6 @@ const Content: React.FC<{
       <div
         onClick={() => {
           setIsOpen(false);
-          console.log("clicked");
         }}
         className="fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.5)]"
       ></div>

@@ -18,6 +18,31 @@ export const bannerPut = async (req: Request, res: Response) => {
     const { description, link, start_time, end_time, is_visible } =
       parsedInput.data;
 
+    //before updaing check the date should not overlap with other banners
+    const banner_present_with_overlap = await prisma.banner.findFirst({
+      where: {
+        NOT: { id },
+        AND: [
+          {
+            start_time: {
+              lte: start_time,
+            },
+            end_time: {
+              gte: end_time,
+            },
+          },
+        ],
+      },
+    });
+
+    console.log(banner_present_with_overlap);
+    if (banner_present_with_overlap) {
+      return res.status(409).json({
+        success: false,
+        message: `please edit or delete banner overlaping the same dates`,
+      });
+    }
+
     await prisma.banner.update({
       where: { id },
       data: {

@@ -8,8 +8,16 @@ export const bannerGet = async (req: Request, res: Response) => {
     //
     const banner = await prisma.banner.findFirst({
       where: {
-        start_time: { lte: currentDate },
-        end_time: { gte: currentDate },
+        OR: [
+          {
+            start_time: {
+              lte: currentDate,
+            },
+            end_time: {
+              gte: currentDate,
+            },
+          },
+        ],
       },
     });
     if (!banner) {
@@ -69,7 +77,9 @@ export const bannerGetbyId = async (req: Request, res: Response) => {
 
 export const bannerGetAll = async (req: Request, res: Response) => {
   try {
-    const banners = await prisma.banner.findMany();
+    const banners = await prisma.banner.findMany({
+      orderBy: { start_time: "asc" },
+    });
     if (!banners) {
       return res
         .json({

@@ -18,8 +18,16 @@ const bannerGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //
         const banner = yield db_1.prisma.banner.findFirst({
             where: {
-                start_time: { lte: currentDate },
-                end_time: { gte: currentDate },
+                OR: [
+                    {
+                        start_time: {
+                            lte: currentDate,
+                        },
+                        end_time: {
+                            gte: currentDate,
+                        },
+                    },
+                ],
             },
         });
         if (!banner) {
@@ -81,7 +89,9 @@ const bannerGetbyId = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.bannerGetbyId = bannerGetbyId;
 const bannerGetAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const banners = yield db_1.prisma.banner.findMany();
+        const banners = yield db_1.prisma.banner.findMany({
+            orderBy: { start_time: "asc" },
+        });
         if (!banners) {
             return res
                 .json({

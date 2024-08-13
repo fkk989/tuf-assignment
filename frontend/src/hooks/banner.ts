@@ -42,14 +42,20 @@ export const useGetTodaysBanner = () => {
 
 export const useAddBanner = () => {
   const [isSuccess, setIsSuccess] = useState(false);
+  //
   const mutate = async (data: Partial<FormData>) => {
-    const res = await axios.post("/api/v1/banner", data);
-    console.log(res);
-    if (res.statusText === "OK") {
-      setIsSuccess(true);
-      toast.success("added successfully", { id: "add-banner" });
-    } else {
-      toast.error("Error adding banner", { id: "add-banner" });
+    try {
+      const res = await axios.post("/api/v1/banner", data);
+      //
+      if (res.statusText === "OK") {
+        setIsSuccess(true);
+        toast.success("added successfully", { id: "add-banner" });
+      }
+    } catch (error: any) {
+      console.log("err response", error);
+      toast.error(error?.response?.data?.message ?? "Error adding banner", {
+        id: "add-banner",
+      });
     }
   };
   return { mutate, isSuccess };
@@ -64,14 +70,18 @@ export const useUpdateBanner = () => {
     data: Partial<FormData>;
     id: string;
   }) => {
-    toast.loading("wait", { id: "add-banner" });
-    const res = await axios.put(`/api/v1/banner/${id}`, data);
-    console.log(res);
-    if (res.statusText === "OK") {
-      setIsSuccess(true);
-      toast.success("updated successfully", { id: "add-banner" });
-    } else {
-      toast.error("Error adding banner", { id: "add-banner" });
+    try {
+      toast.loading("wait", { id: "add-banner" });
+      const res = await axios.put(`/api/v1/banner/${id}`, data);
+      if (res.statusText === "OK") {
+        setIsSuccess(true);
+        toast.success("updated successfully", { id: "add-banner" });
+      }
+    } catch (error: any) {
+      console.log("err response", error);
+      toast.error(error?.response?.data?.message ?? "Error adding banner", {
+        id: "add-banner",
+      });
     }
   };
   return { mutate, isSuccess };
@@ -80,13 +90,18 @@ export const useUpdateBanner = () => {
 export const useDeleteBanner = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const mutate = async (data: { id: string }) => {
-    const res = await axios.delete(`/api/v1/banner/${data.id}`);
-    console.log(res);
-    if (res.statusText === "OK") {
-      setIsSuccess(true);
-      toast.success("added successfully", { id: "add-banner" });
-    } else {
-      toast.error("Error adding banner", { id: "add-banner" });
+    try {
+      const res = await axios.delete(`/api/v1/banner/${data.id}`);
+      console.log(res);
+      if (res.statusText === "OK") {
+        setIsSuccess(true);
+        toast.success("added successfully", { id: "add-banner" });
+      }
+    } catch (error: any) {
+      console.log("err response", error);
+      toast.error(error?.response?.data?.message ?? "Error adding banner", {
+        id: "add-banner",
+      });
     }
   };
   return { mutate, isSuccess };

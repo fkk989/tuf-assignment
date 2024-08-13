@@ -14,6 +14,7 @@ export const Home = () => {
   useEffect(() => {
     if (isSuccess) {
       refetch();
+      window.location.reload();
       setOpenAddModal(false);
     }
   }, [isSuccess]);
