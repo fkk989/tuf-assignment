@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 
 const Countdown = ({ timeStampe }: { timeStampe: string }) => {
   //
+  const targetDate = new Date(timeStampe).getTime();
+  //
   function calculateTimeLeft() {
     const now = new Date().getTime();
     const difference = targetDate - now;
@@ -31,8 +33,7 @@ const Countdown = ({ timeStampe }: { timeStampe: string }) => {
 
     return timeLeft;
   }
-  //
-  const targetDate = new Date(timeStampe).getTime();
+
   //
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   //
